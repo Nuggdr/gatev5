@@ -4,9 +4,9 @@ const Home = () => {
         <h1>Painel de Administração</h1>
         <nav>
           <ul>
-            <li><a href="/admin/add-machine">Adicionar Máquina</a></li>
-            <li><a href="/admin/assign-machine">Associar Máquina</a></li>
-            <li><a href="/admin/user-dashboard">Dashboard do Usuário</a></li>
+            <li><link href="/admin/add-machine">Adicionar Máquina</link></li>
+            <li><link href="/admin/assign-machine">Associar Máquina</link></li>
+            <li><link href="/admin/user-dashboard">Dashboard do Usuário</link></li>
           </ul>
         </nav>
       </div>
