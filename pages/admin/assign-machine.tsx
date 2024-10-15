@@ -1,14 +1,24 @@
-// pages/assign-machine.tsx
+// pages/admin/assign-machine.tsx
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
+interface User {
+    _id: string;
+    username: string;
+}
+
+interface Machine {
+    _id: string;
+    ip: string;
+}
+
 const AssignMachine = () => {
-    const [users, setUsers] = useState<any[]>([]); // Defina um tipo apropriado
-    const [machines, setMachines] = useState<any[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
+    const [machines, setMachines] = useState<Machine[]>([]);
     const [selectedUser, setSelectedUser] = useState('');
     const [selectedMachineId, setSelectedMachineId] = useState('');
-    const router = useRouter(); // O router é usado aqui
+    const router = useRouter();
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -22,7 +32,7 @@ const AssignMachine = () => {
 
         const fetchMachines = async () => {
             try {
-                const res = await axios.get('/api/machines'); // Certifique-se de ter essa rota configurada
+                const res = await axios.get('/api/machines');
                 setMachines(res.data);
             } catch (error) {
                 console.error('Erro ao buscar máquinas:', error);
@@ -47,7 +57,7 @@ const AssignMachine = () => {
 
             if (res.status === 200) {
                 alert('Máquina atribuída com sucesso!');
-                router.push('/'); // Redireciona para a página inicial ou outra página após a atribuição
+                router.push('/');
             } else {
                 alert('Erro ao atribuir a máquina: ' + res.data.message);
             }
@@ -85,7 +95,7 @@ const AssignMachine = () => {
                     >
                         <option value="">Selecione uma máquina</option>
                         {machines.map(machine => (
-                            <option key={machine._id} value={machine._id}>{machine.ip}</option> // Assume que `ip` é o campo que você deseja exibir
+                            <option key={machine._id} value={machine._id}>{machine.ip}</option>
                         ))}
                     </select>
                 </div>
