@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 const AssignMachine = () => {
-    const [users, setUsers] = useState([]);
-    const [machines, setMachines] = useState([]);
+    const [users, setUsers] = useState<any[]>([]); // Defina um tipo apropriado
+    const [machines, setMachines] = useState<any[]>([]);
     const [selectedUser, setSelectedUser] = useState('');
     const [selectedMachineId, setSelectedMachineId] = useState('');
-    const router = useRouter();
+    const router = useRouter(); // O router é usado aqui
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -22,7 +22,7 @@ const AssignMachine = () => {
 
         const fetchMachines = async () => {
             try {
-                const res = await axios.get('/api/machines'); // Certifique-se de ter essa rota
+                const res = await axios.get('/api/machines'); // Certifique-se de ter essa rota configurada
                 setMachines(res.data);
             } catch (error) {
                 console.error('Erro ao buscar máquinas:', error);
@@ -34,16 +34,26 @@ const AssignMachine = () => {
     }, []);
 
     const handleAssignMachine = async () => {
-        const res = await axios.post('/api/assign-machine', {
-            username: selectedUser,
-            machineId: selectedMachineId,
-        });
+        if (!selectedUser || !selectedMachineId) {
+            alert('Por favor, selecione um usuário e uma máquina.');
+            return;
+        }
 
-        if (res.status === 200) {
-            alert('Máquina atribuída com sucesso!');
-            // Redirecionar ou fazer algo após a atribuição
-        } else {
-            alert('Erro ao atribuir a máquina: ' + res.data.message);
+        try {
+            const res = await axios.post('/api/assign-machine', {
+                username: selectedUser,
+                machineId: selectedMachineId,
+            });
+
+            if (res.status === 200) {
+                alert('Máquina atribuída com sucesso!');
+                router.push('/'); // Redireciona para a página inicial ou outra página após a atribuição
+            } else {
+                alert('Erro ao atribuir a máquina: ' + res.data.message);
+            }
+        } catch (error) {
+            console.error('Erro ao atribuir máquina:', error);
+            alert('Erro ao atribuir a máquina: ' + error.response?.data?.message || error.message);
         }
     };
 
