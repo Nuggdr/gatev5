@@ -3,20 +3,11 @@ import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI; // Certifique-se de que você está usando a variável de ambiente correta
 const options = {
- 
+    
 };
 
-// Extensão da interface do global
-declare global {
-    namespace NodeJS {
-        interface Global {
-            _mongoClientPromise?: Promise<MongoClient>; // Adiciona a propriedade que está sendo usada
-        }
-    }
-}
-
-let client: MongoClient | null = null; // Define o tipo explicitamente como MongoClient ou null
-let clientPromise: Promise<MongoClient> | null = null; // Define o tipo como Promise<MongoClient> ou null
+let client: MongoClient | null = null;
+let clientPromise: Promise<MongoClient> | null = null;
 
 if (process.env.NODE_ENV === 'development') {
     // Durante o desenvolvimento, usamos o cliente do MongoDB de forma global
