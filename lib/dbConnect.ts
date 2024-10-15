@@ -1,10 +1,13 @@
+// lib/dbConnect.ts
 import { MongoClient } from 'mongodb';
 
-const uri = process.env.MONGODB_URI; // Sua URI do MongoDB
-const options = { useNewUrlParser: true, useUnifiedTopology: true };
+const uri = process.env.MONGODB_URI; // Certifique-se de que você está usando a variável de ambiente correta
+const options = {
 
-let client;
-let clientPromise;
+};
+
+let client: MongoClient | null = null; // Define o tipo explicitamente como MongoClient ou null
+let clientPromise: Promise<MongoClient> | null = null; // Define o tipo como Promise<MongoClient> ou null
 
 if (process.env.NODE_ENV === 'development') {
     // Durante o desenvolvimento, usamos o cliente do MongoDB de forma global
@@ -14,12 +17,10 @@ if (process.env.NODE_ENV === 'development') {
     }
     clientPromise = global._mongoClientPromise;
 } else {
-    // Durante a produção, cria um novo cliente do MongoDB
+    // No ambiente de produção, criamos um novo cliente a cada vez
     client = new MongoClient(uri, options);
     clientPromise = client.connect();
 }
 
-export default async function dbConnect() {
-    const client = await clientPromise;
-    return client.db(); // Retorna a instância do banco de dados
-}
+// Exporta o cliente para ser usado em outras partes da aplicação
+export default clientPromise;
